@@ -1,0 +1,553 @@
+<html><head><base href="data:text/html;base64," target="_blank"><meta name="color-scheme" content="dark light"></head>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.digital-snake-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;  /* This puts the snakes behind other content */
+}
+
+#gameCanvas,
+.score-board,
+.level-indicator,
+.progress-bar,
+.campaign-info,
+.controls {
+    position: relative;
+    z-index: 1;
+}
+
+#gameCanvas {
+    border: 2px solid #4CAF50;
+    background: #000;
+    margin: 20px;
+}
+
+.controls {
+    margin: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #4CAF50;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.score-board {
+    font-size: 24px;
+    margin: 20px;
+}
+
+.level-indicator {
+    font-size: 20px;
+    margin: 10px;
+    color: #4CAF50;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.campaign-info {
+    font-size: 18px;
+    margin: 10px;
+    text-align: center;
+}
+
+.digital-snake {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    animation: moveAcrossScreen 15s linear infinite;
+}
+
+.digital-snake:nth-child(2) { top: 20%; animation-delay: -3s; }
+.digital-snake:nth-child(3) { top: 40%; animation-delay: -6s; }
+.digital-snake:nth-child(4) { top: 60%; animation-delay: -9s; }
+.digital-snake:nth-child(5) { top: 80%; animation-delay: -12s; }
+.digital-snake:nth-child(6) { top: 90%; animation-delay: -2s; }
+
+.digital-body {
+    display: flex;
+    align-items: center;
+}
+
+.digital-segment {
+    width: 20px;
+    height: 20px;
+    background: #0ff;
+    margin: 2px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #0ff;
+}
+
+@keyframes moveAcrossScreen {
+    from {
+        transform: translateX(-100px);
+    }
+    to {
+        transform: translateX(calc(100vw + 100px));
+    }
+}
+
+.digital-head {
+    width: 25px;
+    height: 25px;
+    background: #0ff;
+    border-radius: 50%;
+    margin-right: 4px;
+    position: relative;
+    box-shadow: 0 0 15px #0ff;
+}
+
+.digital-eye {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #000;
+    border-radius: 50%;
+    top: 6px;
+}
+
+.digital-eye.left {
+    left: 5px;
+}
+
+.digital-eye.right {
+    right: 5px;
+}
+</style>
+
+<div class="digital-snake-container">
+    <div class="digital-snake">
+        <div class="digital-head">
+            <div class="digital-eye left"></div>
+            <div class="digital-eye right"></div>
+        </div>
+        <div class="digital-body">
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+        </div>
+    </div>
+    <div class="digital-snake">
+        <div class="digital-head">
+            <div class="digital-eye left"></div>
+            <div class="digital-eye right"></div>
+        </div>
+        <div class="digital-body">
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+        </div>
+    </div>
+    <div class="digital-snake">
+        <div class="digital-head">
+            <div class="digital-eye left"></div>
+            <div class="digital-eye right"></div>
+        </div>
+        <div class="digital-body">
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+        </div>
+    </div>
+    <div class="digital-snake">
+        <div class="digital-head">
+            <div class="digital-eye left"></div>
+            <div class="digital-eye right"></div>
+        </div>
+        <div class="digital-body">
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+        </div>
+    </div>
+    <div class="digital-snake">
+        <div class="digital-head">
+            <div class="digital-eye left"></div>
+            <div class="digital-eye right"></div>
+        </div>
+        <div class="digital-body">
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+        </div>
+    </div>
+    <div class="digital-snake">
+        <div class="digital-head">
+            <div class="digital-eye left"></div>
+            <div class="digital-eye right"></div>
+        </div>
+        <div class="digital-body">
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+            <div class="digital-segment"></div>
+        </div>
+    </div>
+</div>
+
+<div class="score-board">Score: <span id="score">0</span></div>
+<div class="level-indicator">Level: <span id="levelDisplay">1</span></div>
+<div class="progress-bar">
+    <div id="progressBar" class="progress" style="width: 0%"></div>
+</div>
+<div class="campaign-info" id="campaignInfo"></div>
+<canvas id="gameCanvas" width="400" height="400"></canvas>
+<div class="controls">
+    <button onclick="switchMode('classic')">Classic Mode</button>
+    <button onclick="switchMode('campaign')">Campaign Mode</button>
+    <button onclick="resetGame()">Reset Game</button>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const scoreElement = document.getElementById('score');
+const campaignInfo = document.getElementById('campaignInfo');
+const levelDisplay = document.getElementById('levelDisplay');
+const progressBar = document.getElementById('progressBar');
+
+const gridSize = 20;
+const tileCount = canvas.width / gridSize;
+
+let snake = [
+    { x: 10, y: 10 },
+];
+let food = { x: 15, y: 15 };
+let dx = 0;
+let dy = 0;
+let score = 0;
+let gameSpeed = 200; // Starting slower
+let gameMode = 'classic';
+let gameLoop;
+let obstacles = [];
+let level = 1;
+let foodToNextLevel = 5;
+let foodEatenThisLevel = 0;
+let snakeColor = '#4CAF50';
+
+const colors = [
+    '#4CAF50', '#2196F3', '#9C27B0', '#FF9800', 
+    '#E91E63', '#00BCD4', '#FF5722', '#FFEB3B',
+    '#3F51B5', '#009688', '#795548', '#F44336'
+];
+
+function getRandomColor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+const campaignLevels = [
+    { speed: 100, obstacles: 0 },
+    { speed: 90, obstacles: 2 },
+    { speed: 80, obstacles: 4 },
+    { speed: 70, obstacles: 6 },
+    { speed: 60, obstacles: 8 }
+];
+
+function switchMode(mode) {
+    gameMode = mode;
+    resetGame();
+}
+
+function resetGame() {
+    snake = [{ x: 10, y: 10 }];
+    score = 0;
+    dx = 0;
+    dy = 0;
+    level = 1;
+    foodEatenThisLevel = 0;
+    scoreElement.textContent = score;
+    updateLevelDisplay();
+    clearInterval(gameLoop);
+    generateFood();
+    obstacles = []; // Clear obstacles
+    if (gameMode === 'campaign') {
+        setupLevel(level);
+    } else {
+        gameSpeed = 200; // Starting slower
+        campaignInfo.textContent = 'Classic Mode - Level up every 90 points!';
+    }
+    gameLoop = setInterval(draw, gameSpeed);
+}
+
+function updateLevelDisplay() {
+    levelDisplay.textContent = level;
+    const progress = (foodEatenThisLevel / foodToNextLevel) * 100;
+    progressBar.style.width = `${progress}%`;
+    progressBar.style.backgroundColor = snakeColor;
+}
+
+function setupLevel(level) {
+    if (level > campaignLevels.length) {
+        alert('Congratulations! You beat all levels!');
+        switchMode('classic');
+        return;
+    }
+    
+    obstacles = [];
+    const levelConfig = campaignLevels[level - 1];
+    gameSpeed = levelConfig.speed;
+    
+    for (let i = 0; i < levelConfig.obstacles; i++) {
+        generateObstacle();
+    }
+    
+    campaignInfo.textContent = `Level ${level} - Collect ${foodToNextLevel} food to advance`;
+    updateLevelDisplay();
+    clearInterval(gameLoop);
+    gameLoop = setInterval(draw, gameSpeed);
+}
+
+function generateObstacle() {
+    let obstacle;
+    do {
+        obstacle = {
+            x: Math.floor(Math.random() * tileCount),
+            y: Math.floor(Math.random() * tileCount)
+        };
+    } while (
+        isCollision(obstacle, snake) ||
+        isCollision(obstacle, [food]) ||
+        obstacles.some(obs => obs.x === obstacle.x && obs.y === obstacle.y)
+    );
+    obstacles.push(obstacle);
+}
+
+function generateFood() {
+    do {
+        food = {
+            x: Math.floor(Math.random() * tileCount),
+            y: Math.floor(Math.random() * tileCount)
+        };
+    } while (
+        isCollision(food, snake) ||
+        isCollision(food, obstacles)
+    );
+}
+
+function drawGame() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    
+    for (let x = 0; x <= canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+    
+    for (let y = 0; y <= canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
+    
+    ctx.fillStyle = snakeColor;
+    snake.forEach((segment, index) => {
+        ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+        
+        if (index === 0) {
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(segment.x * gridSize + gridSize * 0.3, segment.y * gridSize + gridSize * 0.3, 2, 0, Math.PI * 2);
+            ctx.arc(segment.x * gridSize + gridSize * 0.7, segment.y * gridSize + gridSize * 0.3, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(segment.x * gridSize + gridSize * 0.5, segment.y * gridSize + gridSize * 0.7, 4, 0, Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = snakeColor;
+        }
+    });
+    
+    ctx.fillStyle = '#ff0000';
+    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+    
+    ctx.fillStyle = '#666';
+    obstacles.forEach(obstacle => {
+        ctx.fillRect(obstacle.x * gridSize, obstacle.y * gridSize, gridSize - 2, gridSize - 2);
+    });
+}
+
+function isCollision(pos, array) {
+    return array.some(segment => segment.x === pos.x && segment.y === pos.y);
+}
+
+function moveSnake() {
+    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+    
+    if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+        return false;
+    }
+    
+    if (isCollision(head, snake)) {
+        return false;
+    }
+    
+    if (isCollision(head, obstacles)) {
+        return false;
+    }
+    
+    snake.unshift(head);
+    
+    if (head.x === food.x && head.y === food.y) {
+        score += 10 * level;
+        scoreElement.textContent = score;
+        snakeColor = getRandomColor();
+        generateFood();
+        
+        gameSpeed = Math.max(50, gameSpeed - 10); // Minimum speed of 50ms
+        clearInterval(gameLoop);
+        gameLoop = setInterval(draw, gameSpeed);
+        
+        if (gameMode === 'classic' && score > 0 && score % 90 === 0) {
+            level++;
+            updateLevelDisplay();
+            // Add some obstacles as the level increases in classic mode
+            if (obstacles.length < 8) { // Cap max obstacles at 8
+                generateObstacle();
+            }
+        }
+        
+        if (gameMode === 'campaign') {
+            foodEatenThisLevel++;
+            updateLevelDisplay();
+            if (foodEatenThisLevel >= foodToNextLevel) {
+                level++;
+                foodEatenThisLevel = 0;
+                setupLevel(level);
+            }
+        }
+    } else {
+        snake.pop();
+    }
+    
+    return true;
+}
+
+function draw() {
+    if (dx === 0 && dy === 0) {
+        drawGame();
+        return;
+    }
+    
+    if (!moveSnake()) {
+        clearInterval(gameLoop);
+        alert('Game Over! Score: ' + score);
+        resetGame();
+        return;
+    }
+    
+    drawGame();
+}
+
+document.addEventListener('keydown', (event) => {
+    switch (event.key) {
+        case 'ArrowUp':
+            if (dy !== 1) { dx = 0; dy = -1; }
+            break;
+        case 'ArrowDown':
+            if (dy !== -1) { dx = 0; dy = 1; }
+            break;
+        case 'ArrowLeft':
+            if (dx !== 1) { dx = -1; dy = 0; }
+            break;
+        case 'ArrowRight':
+            if (dx !== -1) { dx = 1; dy = 0; }
+            break;
+    }
+});
+
+resetGame();
+</script>
+</html>
